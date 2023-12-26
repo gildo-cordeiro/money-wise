@@ -1,7 +1,18 @@
-import { Controller, Injectable } from "@nestjs/common";
+import { Body, Controller, Get, Injectable, Post } from "@nestjs/common";
+import { UserDto } from "src/model/dto/user";
+import { UserService } from "src/services/user.service";
 
-@Injectable()
-@Controller()
+@Controller('users')
 export class UserController {
-    // service implementation
+    constructor(private readonly userService: UserService) { }
+    
+    @Post('save')
+    async create(@Body() data: UserDto) {
+        return this.userService.create(data);
+    }
+
+    @Get()
+    list_users() {
+        return 'This action returns all users';
+    }
 }

@@ -2,7 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider   = "prisma-client-js"
+  engineType = "binary"
 }
 
 datasource db {
@@ -12,10 +13,12 @@ datasource db {
 
 model User {
   id       String    @id @default(uuid())
-  name     String
-  email    String    @unique
-  password String
+  name     String    @db.VarChar(100)
+  email    String    @unique @db.VarChar(255)
+  password String    @db.VarChar(255)
   accounts Account[]
+
+  @@map("users")
 }
 
 model Category {
@@ -27,8 +30,8 @@ model Category {
 
 model Budget {
   id         String   @id @default(uuid())
-  name       String
-  amount     Float
+  name       String   @db.VarChar(100)
+  amount     Float    @db.DoublePrecision
   startDate  DateTime
   endDate    DateTime
   categoryId String
