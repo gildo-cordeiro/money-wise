@@ -1,7 +1,10 @@
-import { Controller, Injectable } from "@nestjs/common";
+import { Controller, Get } from "@nestjs/common";
 
-@Injectable()
-@Controller()
+@Controller("account")
 export class AccountController {
-    // service implementation
+    
+    @Get()
+    getHello(): string {
+      return "sadasd";
+    }   
 }
