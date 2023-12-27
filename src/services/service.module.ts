@@ -26,4 +26,4 @@ import { PrismaModule } from 'src/prisma/prisma.module';
     TransactionService,
   ],
 })
-export class SeriveModuel {}
+export class ServiceModule {}

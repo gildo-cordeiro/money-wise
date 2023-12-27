@@ -1,14 +1,14 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
-import { config } from 'dotenv';
 import { AuthService } from './auth.service';
+import { ServiceModule } from 'src/services/service.module';
 
 @Module({
   imports: [
-    JwtModule.register({
-      secret: config().parsed.PRIVATE_KEY,
-    }),
+    JwtModule.register({ secret: process.env.JWT_SECRET }),
+    ServiceModule,
   ],
   providers: [AuthService],
+  exports: [AuthService],
 })
 export class AuthModule {}

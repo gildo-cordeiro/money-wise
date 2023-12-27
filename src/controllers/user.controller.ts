@@ -1,18 +1,48 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
+import { Roles } from 'src/decoretors/roles.decoretors';
+import { Role } from 'src/enums/roles.enum';
 import { UserDto } from 'src/model/dto/user';
+import { RolesGuard } from 'src/guards/role.guard';
 import { UserService } from 'src/services/user.service';
+import { AuthGuard } from 'src/guards/auth.guard';
 
-@Controller('users')
+@Roles(Role.ADMIN)
+@UseGuards(AuthGuard, RolesGuard)
+@Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post('save')
-  async create(@Body() data: UserDto) {
+  @Post('create')
+  create(@Body() data: UserDto) {
     return this.userService.create(data);
   }
 
   @Get()
-  list_users() {
-    return 'This action returns all users';
+  findAll() {
+    return { message: 'Users found' };
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return { message: 'User found' };
+  }
+
+  @Put(':id')
+  update(@Param('id') id: string, @Body() data: UserDto) {
+    return { message: 'User updated' };
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return { message: 'User removed' };
   }
 }

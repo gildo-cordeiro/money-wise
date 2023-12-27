@@ -1,20 +1,25 @@
-import { IsEmail, IsString, IsStrongPassword } from 'class-validator';
+import {
+  IsEmail,
+  IsEnum,
+  IsOptional,
+  IsString,
+  IsStrongPassword,
+  MinLength,
+  minDate,
+  minLength,
+} from 'class-validator';
+import { Role } from 'src/enums/roles.enum';
 
 export class UserDto {
-  @IsString({
-    message: 'Name must be a string',
-  })
   name: string;
 
   @IsEmail()
   email: string;
 
-  @IsStrongPassword({
-    minLength: 4,
-    minLowercase: 0,
-    minUppercase: 0,
-    minNumbers: 0,
-    minSymbols: 0,
-  })
+  @MinLength(4)
   password: string;
+
+  @IsOptional()
+  @IsEnum(Role)
+  role: number;
 }
