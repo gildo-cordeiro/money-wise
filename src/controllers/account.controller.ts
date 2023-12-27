@@ -1,10 +1,9 @@
-import { Controller, Get } from "@nestjs/common";
+import { Controller, Get } from '@nestjs/common';
 
-@Controller("account")
+@Controller('account')
 export class AccountController {
-    
-    @Get()
-    getHello(): string {
-      return "sadasd";
-    }   
+  @Get()
+  getHello(): string {
+    return 'sadasd';
+  }
 }
