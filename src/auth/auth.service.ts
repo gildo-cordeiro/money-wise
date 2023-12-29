@@ -1,15 +1,19 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { User } from '@prisma/client';
 import { UserDto } from 'src/model/dto/user';
 import { UserService } from 'src/services/user.service';
 import * as bcrypt from 'bcrypt';
+import { Repository } from 'typeorm';
+import { User } from 'src/model/user';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class AuthService {
   constructor(
     private userService: UserService,
     private jwtService: JwtService,
+    @InjectRepository(User)
+    private usersRepository: Repository<User>,
   ) {}
 
   createToken(user: User) {
@@ -31,7 +35,7 @@ export class AuthService {
   }
 
   async signIn(email: string, pass: string) {
-    const user = await this.userService.findOne(email);
+    const user = await this.userService.findOneByEmail(email);
 
     if (!user) {
       throw new UnauthorizedException('Wrong credentials provided');
@@ -49,7 +53,7 @@ export class AuthService {
   }
 
   async signUp(data: UserDto) {
-    if (await this.userService.findOne(data.email)) {
+    if (await this.userService.findOneByEmail(data.email)) {
       throw new UnauthorizedException('User already exists');
     }
 

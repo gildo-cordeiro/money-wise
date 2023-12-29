@@ -1,8 +1,18 @@
 import { Account } from './account';
+import { BaseEntity } from './base-entity';
+import { Column, Entity, OneToMany } from 'typeorm';
 
-export class User {
+@Entity('users')
+export class User extends BaseEntity {
+  @Column({ name: 'name' })
   name: string;
+
+  @Column({ name: 'email' })
   email: string;
+
+  @Column({ name: 'password' })
   password: string;
+
+  @OneToMany(() => Account, (account) => account.user)
   accounts: Account[];
 }
