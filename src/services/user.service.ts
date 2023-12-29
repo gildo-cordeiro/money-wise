@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { UUID } from 'crypto';
 import { UserDto } from 'src/model/dto/user';
 import { PrismaService } from 'src/prisma/prisma.service';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -20,17 +21,21 @@ export class UserService {
   }
 
   async create(user: UserDto) {
-    return await this.prisma.user.create({
-      data: {
-        name: user.name,
-        email: user.email,
-        password: user.password,
-        role: user.role,
-      },
+    user.password = await bcrypt.hash(user.password, await bcrypt.genSalt());
+
+    return this.prisma.user.create({
+      data: user,
     });
   }
 
   async findAll() {
     return await this.prisma.user.findMany();
+  }
+
+  async remove(id: string) {
+    throw new Error('Method not implemented.');
+  }
+  async update(id: string, data: UserDto) {
+    throw new Error('Method not implemented.');
   }
 }

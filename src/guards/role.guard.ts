@@ -2,7 +2,6 @@ import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
 import { ROLES_KEY } from 'src/decoretors/roles.decoretors';
-import { Role } from 'src/enums/roles.enum';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -21,9 +20,6 @@ export class RolesGuard implements CanActivate {
     }
 
     const { user } = context.switchToHttp().getRequest();
-
-    console.log(user);
-    console.log(requeridRoles);
 
     return requeridRoles.filter((role) => role === user.role).length > 0;
   }

@@ -3,11 +3,12 @@ import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
 import { UserDto } from 'src/model/dto/user';
 import { UserService } from 'src/services/user.service';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService: UserService,
+    private userService: UserService,
     private jwtService: JwtService,
   ) {}
 
@@ -30,9 +31,13 @@ export class AuthService {
   }
 
   async signIn(email: string, pass: string) {
-    const user = await this.usersService.findOne(email);
+    const user = await this.userService.findOne(email);
 
-    if (user.password !== pass) {
+    if (!user) {
+      throw new UnauthorizedException('Wrong credentials provided');
+    }
+
+    if (!(await bcrypt.compare(pass, user.password))) {
       throw new UnauthorizedException('Wrong credentials provided');
     }
 
@@ -44,11 +49,11 @@ export class AuthService {
   }
 
   async signUp(data: UserDto) {
-    if (await this.usersService.findOne(data.email)) {
+    if (await this.userService.findOne(data.email)) {
       throw new UnauthorizedException('User already exists');
     }
 
-    const user = await this.usersService.create(data);
+    const user = await this.userService.create(data);
     return this.createToken(user);
   }
 }

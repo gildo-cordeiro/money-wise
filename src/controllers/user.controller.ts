@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseUUIDPipe,
   Post,
   Put,
   UseGuards,
@@ -27,22 +28,18 @@ export class UserController {
   }
 
   @Get()
-  findAll() {
-    return { message: 'Users found' };
-  }
-
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return { message: 'User found' };
+  findOne(@Param('id', ParseUUIDPipe) id) {
+    return this.userService.findOneById(id);
   }
 
   @Put(':id')
   update(@Param('id') id: string, @Body() data: UserDto) {
-    return { message: 'User updated' };
+    return this.userService.update(id, data);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return { message: 'User removed' };
+    return this.userService.remove(id);
   }
 }
